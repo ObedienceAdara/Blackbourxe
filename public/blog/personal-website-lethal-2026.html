@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Makes a Personal Website Lethal in 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f5f0e8;
+    --acid: #c8ff00;
+    --rust: #d4380d;
+    --slate: #2a2f3a;
+    --muted: #6b6b6b;
+    --border: rgba(10,10,10,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .masthead::before {
+    content: 'RESEARCH';
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 160px;
+    color: rgba(200,255,0,0.07);
+    letter-spacing: -4px;
+    user-select: none;
+  }
+
+  .masthead-meta {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 40px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+  }
+
+  .masthead-meta span { display: flex; align-items: center; gap: 8px; }
+  .masthead-meta span::before { content: '▸'; color: var(--acid); }
+
+  .masthead h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 7vw, 88px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .masthead h1 em {
+    font-style: normal;
+    color: var(--acid);
+  }
+
+  .masthead-sub {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(245,240,232,0.65);
+    max-width: 560px;
+    line-height: 1.5;
+  }
+
+  /* ── NAV INDEX ── */
+  .index-bar {
+    background: var(--acid);
+    padding: 16px 60px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .index-bar a {
+    color: var(--ink);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .index-bar a:hover { opacity: 0.5; }
+
+  /* ── LAYOUT ── */
+  .wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+
+  /* ── SECTION ── */
+  section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 40px;
+    height: 1px;
+    background: var(--rust);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    margin-bottom: 40px;
+  }
+
+  .lead {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--slate);
+    max-width: 680px;
+    margin-bottom: 40px;
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .card {
+    background: var(--paper);
+    padding: 32px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .card:hover { background: #ede8d8; }
+
+  .card-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: rgba(10,10,10,0.06);
+    line-height: 1;
+    margin-bottom: 12px;
+    letter-spacing: -2px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 10px;
+  }
+
+  .card p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .card .tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--acid);
+    padding: 4px 10px;
+  }
+
+  /* ── FULL BLEED CALLOUT ── */
+  .callout {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px;
+    margin: 60px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .callout::before {
+    content: '"';
+    position: absolute;
+    top: -40px;
+    left: 30px;
+    font-size: 280px;
+    font-family: 'Instrument Serif', serif;
+    color: rgba(200,255,0,0.08);
+    line-height: 1;
+    user-select: none;
+  }
+
+  .callout p {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(20px, 3vw, 30px);
+    line-height: 1.4;
+    max-width: 700px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .callout cite {
+    display: block;
+    margin-top: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--acid);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .stat {
+    background: var(--paper);
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    color: var(--rust);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* ── CHECKLIST ── */
+  .checklist {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .checklist li::before {
+    content: '✓';
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    color: var(--rust);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── TIER TABLE ── */
+  .tier-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 13px;
+  }
+
+  .tier-table th {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 20px;
+    text-align: left;
+  }
+
+  .tier-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    color: var(--slate);
+    vertical-align: top;
+  }
+
+  .tier-table tr:hover td { background: rgba(10,10,10,0.03); }
+
+  .tier-table .tier-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 14px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    font-weight: 600;
+  }
+
+  .badge.must { background: var(--rust); color: white; }
+  .badge.should { background: var(--acid); color: var(--ink); }
+  .badge.nice { background: #e0e0e0; color: var(--ink); }
+
+  /* ── STACK COLUMN ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+    margin: 40px 0;
+  }
+
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+    .wrapper { padding: 0 24px; }
+    .masthead { padding: 40px 24px; }
+    .index-bar { padding: 14px 24px; }
+    .callout { padding: 40px 24px; }
+  }
+
+  .sub-head {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  /* ── KILL LIST ── */
+  .kill-list {
+    list-style: none;
+  }
+
+  .kill-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .kill-list li::before {
+    content: '✕';
+    color: var(--rust);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.4);
+    padding: 40px 60px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 12px;
+  }
+
+  footer span { color: var(--acid); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .masthead h1, .masthead-sub {
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .masthead-sub { animation-delay: 0.15s; }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    border-left: 3px solid var(--rust);
+    padding: 20px 24px;
+    margin: 24px 0;
+    background: rgba(212,56,13,0.04);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--slate);
+  }
+
+  .highlight-box strong {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+    color: var(--rust);
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb { background: var(--ink); }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="masthead">
+  <div class="masthead-meta">
+    <span>Deep Research Report</span>
+    <span>Feb 2026</span>
+    <span>Personal Website Strategy</span>
+  </div>
+  <h1>What Makes a<br>Personal Website<br><em>Lethal</em><br>in 2026</h1>
+  <p class="masthead-sub">A no-fluff, research-backed breakdown of every design, performance, branding, and technical dimension that separates forgettable from unforgettable.</p>
+</header>
+
+<!-- INDEX -->
+<nav class="index-bar">
+  <a href="#overview">Overview</a>
+  <a href="#design">Visual Design</a>
+  <a href="#performance">Performance</a>
+  <a href="#content">Content & Branding</a>
+  <a href="#interaction">Interaction & UX</a>
+  <a href="#seo">SEO & Discoverability</a>
+  <a href="#checklist">Master Checklist</a>
+  <a href="#killers">What Kills Sites</a>
+</nav>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="wrapper">
+    <div class="section-label">01 — Overview</div>
+    <h2 class="section-title">The Battlefield Has Changed</h2>
+    <p class="lead">In 2026, AI generates millions of generic websites per day. The bar for "good" has collapsed. The bar for "memorable" has never been higher. Your personal website is your war flag — the thing you plant before anyone gives you a room at the table.</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">8.4%</div>
+        <div class="stat-label">Conversion uplift per 0.1s faster mobile load (Deloitte × Google)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">53%</div>
+        <div class="stat-label">Mobile users abandon if load exceeds 3 seconds</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">57–59%</div>
+        <div class="stat-label">Global e-commerce traffic from mobile devices</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">91%</div>
+        <div class="stat-label">Online consumers want better digital experiences (DesignRush)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2.5s</div>
+        <div class="stat-label">Target Largest Contentful Paint — the performance ceiling</div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>The 2026 Paradox</strong>
+      AI is raising quality floors and lowering identity ceilings. Everyone can ship a polished site. No one can ship YOUR site. The differentiator is no longer craft — it's unmistakable personhood baked into every pixel and paragraph.
+    </div>
+  </div>
+</section>
+
+<!-- VISUAL DESIGN -->
+<section id="design">
+  <div class="wrapper">
+    <div class="section-label">02 — Visual Design</div>
+    <h2 class="section-title">The Aesthetic Landscape</h2>
+    <p class="lead">2026's design vocabulary is plural and in tension. There is no single "right" look — but every top-tier site commits hard to one vision and executes it with surgical precision.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-num">01</div>
+        <div class="card-title">Expressive Typography as Identity</div>
+        <p>Oversized headlines, animated variable fonts, kinetic text that reacts to scroll and sound. In 2026, type IS the brand. Bold, personality-driven letterforms communicate brand voice before the visitor reads a single word. Variable fonts now compress entire type families into one file — cutting load while enabling infinite responsive variation.</p>
+        <span class="tag">Must Execute</span>
+      </div>
+      <div class="card">
+        <div class="card-num">02</div>
+        <div class="card-title">Dopamine Color / Saturated Palettes</div>
+        <p>After years of muted minimalism, bold saturated palettes dominate — neon pinks, electric blues, acid greens. "Dopamine design" communicates confidence and vitality. High-contrast pairings replace safe neutral schemes. If your palette doesn't make someone open their eyes wide, it's invisible.</p>
+        <span class="tag">High Impact</span>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <div class="card-title">Anti-Grid & Organic Layouts</div>
+        <p>Rigid uniformity is dead. Top sites use asymmetry, overlap, diagonal flow, radial menus, and grid-breaking elements. Organic shapes and flowing lines make experiences feel natural and human. Anti-design principles — visible grids, raw textures, utilitarian layouts — separate creative brands from corporate sameness.</p>
+        <span class="tag">Differentiator</span>
+      </div>
+      <div class="card">
+        <div class="card-num">04</div>
+        <div class="card-title">Lightweight 3D & WebGL</div>
+        <p>Tools like Spline, React Three Fiber, and Unicorn Studio put 3D environments in everyone's hands. Responsive 3D adds emotion, not just motion. Liquid distortions, glowing particles, magnetic cursor trails — these are no longer "developer flex" features; they're accessible with good taste alone. Use them to pull visitors in, not to show off.</p>
+        <span class="tag">Technical Edge</span>
+      </div>
+      <div class="card">
+        <div class="card-num">05</div>
+        <div class="card-title">Human Scribble & Imperfection</div>
+        <p>The backlash against AI's hyper-polished aesthetic is driving hand-drawn illustrations, scribble accents, handwriting fonts, and retro-inspired details. These elements signal authenticity and warmth in a world drowning in machine-made perfection. Real brands now weaponize imperfection as a strategic differentiator.</p>
+        <span class="tag">Human Signal</span>
+      </div>
+      <div class="card">
+        <div class="card-num">06</div>
+        <div class="card-title">Light Skeuomorphism & Tactile UI</div>
+        <p>Gently raised buttons, embossed icons, subtle shadows that make elements feel pressable. Not the garish skeuomorphism of 2008 — a refined, barely-there physicality that makes interfaces feel approachable and inviting. Combine with micro-interactions for a "this feels alive" response from visitors.</p>
+        <span class="tag">UX Depth</span>
+      </div>
+      <div class="card">
+        <div class="card-num">07</div>
+        <div class="card-title">Dark/Light Mode with Purpose</div>
+        <p>Both modes should be first-class experiences, not afterthoughts. The best sites in 2026 use mode switching as a brand moment — not just a toggle. Each mode should feel intentional: different moods, same identity. This also signals technical maturity to any employer or collaborator visiting.</p>
+        <span class="tag">Baseline</span>
+      </div>
+      <div class="card">
+        <div class="card-num">08</div>
+        <div class="card-title">Vertical-First, Mobile-Native</div>
+        <p>Portrait-oriented hero imagery, thumb-friendly navigation, 9:16 ratio visuals. With 57%+ of traffic on mobile, the desktop is a secondary screen. Sites that still "scale down" for mobile instead of designing mobile-up are already fighting a losing battle. Mobile-first is not a setting, it's a worldview.</p>
+        <span class="tag">Non-Negotiable</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p>The web in 2026 is not a place you build a website. It's a place you build a presence. The difference is that websites are consumed. Presences are experienced. Only presences get remembered.</p>
+      <cite>— Synthesized from Muzli, Awwwards, Figma 2026 Design Trend Reports</cite>
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE -->
+<section id="performance">
+  <div class="wrapper">
+    <div class="section-label">03 — Performance Engineering</div>
+    <h2 class="section-title">Speed Is Not a Feature.<br>It's the Foundation.</h2>
+    <p class="lead">Every millisecond of delay is a conversion killer. In 2026, Core Web Vitals are a ranking tiebreaker, a UX standard, and a signal of your technical seriousness — all at once.</p>
+
+    <table class="tier-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>What It Measures</th>
+          <th>Target (Good)</th>
+          <th>2026 Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tier-name">LCP</span><br><small>Largest Contentful Paint</small></td>
+          <td>How fast main content becomes visible</td>
+          <td><strong>Under 2.5s</strong></td>
+          <td><span class="badge must">Ranking Factor</span></td>
+        </tr>
+        <tr>
+          <td><span class="tier-name">INP</span><br><small>Interaction to Next Paint</small></td>
+          <td>Responsiveness of ALL user interactions (replaced FID)</td>
+          <td><strong>Under 200ms</strong></td>
+          <td><span class="badge must">Confirmed Ranking Signal</span></td>
+        </tr>
+        <tr>
+          <td><span class="tier-name">CLS</span><br><small>Cumulative Layout Shift</small></td>
+          <td>Visual stability — elements moving after load</td>
+          <td><strong>Under 0.1</strong></td>
+          <td><span class="badge must">Trust Signal</span></td>
+        </tr>
+        <tr>
+          <td><span class="tier-name">TTFB</span><br><small>Time to First Byte</small></td>
+          <td>Server response time</td>
+          <td><strong>Under 600ms</strong></td>
+          <td><span class="badge should">Critical for LCP</span></td>
+        </tr>
+        <tr>
+          <td><span class="tier-name">Image Format</span><br><small>WebP / AVIF</small></td>
+          <td>Next-gen compression</td>
+          <td><strong>Always</strong></td>
+          <td><span class="badge must">Baseline 2026</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="two-col">
+      <div>
+        <h3 class="sub-head">Architecture That Wins</h3>
+        <ul class="kill-list" style="list-style:none;">
+          <li style="color: var(--slate);">
+            <span style="color:var(--acid); font-weight:700; flex-shrink:0;">→</span>
+            <span><strong>Island Architecture</strong> (Astro, Next.js) — hydrate only interactive components. Static everywhere else. Decimates INP scores.</span>
+          </li>
+          <li style="color: var(--slate);">
+            <span style="color:var(--acid); font-weight:700; flex-shrink:0;">→</span>
+            <span><strong>Edge Computing</strong> — Cloudflare Workers, Vercel Edge Functions. Sub-100ms response times globally. No excuses for slow TTFB.</span>
+          </li>
+          <li style="color: var(--slate);">
+            <span style="color:var(--acid); font-weight:700; flex-shrink:0;">→</span>
+            <span><strong>ISR (Incremental Static Regeneration)</strong> — static-speed HTML with dynamic freshness. Best of both worlds.</span>
+          </li>
+          <li style="color: var(--slate);">
+            <span style="color:var(--acid); font-weight:700; flex-shrink:0;">→</span>
+            <span><strong>font-display: swap + preload critical fonts</strong> — prevents layout shift, kills FOIT (flash of invisible text).</span>
+          </li>
+          <li style="color: var(--slate);">
+            <span style="color:var(--acid); font-weight:700; flex-shrink:0;">→</span>
+            <span><strong>Lazy load below-fold</strong> — images, videos, heavy iframes. Reserve critical resources for above-fold only.</span>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="sub-head">Performance Killers to Eliminate</h3>
+        <ul class="kill-list">
+          <li>Heavy JavaScript bundles blocking the main thread</li>
+          <li>Uncompressed images served in JPEG/PNG</li>
+          <li>Undefined image/element dimensions causing CLS</li>
+          <li>Third-party scripts loading synchronously</li>
+          <li>Cheap shared hosting with 800ms+ TTFB</li>
+          <li>Bloated plugin stacks (especially on WordPress)</li>
+          <li>No CDN — serving from a single origin server</li>
+          <li>Not monitoring real user data (use CrUX, not just lab tests)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>The Mobile Penalty</strong>
+      Mobile users hitting poor Core Web Vitals are 40% less likely to return to your site within 30 days. Google uses mobile-first indexing. Your beautifully crafted desktop experience is invisible to the algorithm. Build mobile-first or build irrelevance.
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT & BRANDING -->
+<section id="content">
+  <div class="wrapper">
+    <div class="section-label">04 — Content & Personal Brand</div>
+    <h2 class="section-title">Your Voice Is the Moat</h2>
+    <p class="lead">AI generates flawless content at infinite scale. The only thing AI cannot replicate is lived experience, genuine perspective, and a voice that sounds like one specific human on the planet. In 2026, that's the whole game.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-num">01</div>
+        <div class="card-title">First-Person Authority</div>
+        <p>Say what only you can say. Strong personal brands in 2026 are built on lived experience and perspective. Polished narratives feel distant; real, slightly imperfect stories feel close. Share your failures, your contradictions, your specific obsessions. Honesty converts.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">02</div>
+        <div class="card-title">Project Case Studies, Not Project Lists</div>
+        <p>Don't list projects. Tell stories. What was the problem? What did you try that failed? What did you build, and why did it work? Depth over breadth. One well-documented case study is worth twenty one-line bullet points. Potential employers and collaborators hire the thinking, not the output.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <div class="card-title">Community as Proof</div>
+        <p>The audience is no longer passive. Top personal brands in 2026 invite people in — co-create content, co-write ideas, build shared projects. Followers are becoming collaborators. A community section, a newsletter link, or public side-project invitations signal that you're building something real, not just marketing yourself.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">04</div>
+        <div class="card-title">The About Section as Conversion</div>
+        <p>Your About section is not a resume dump. It's where you inject personality — your story, your passion, your contradictions. It's where a recruiter or collaborator decides if they want to know you. Relatable About sections are where boring sites become memorable ones. Include something only you would say.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Personal Branding in 2026 is Less About Influence, More About Connection</strong>
+      Trust is the currency AI cannot print. Your credibility — through demonstrated work, specific voice, and genuine community — is the signal that cuts through the noise. Every page of your site should answer: why does this person specifically exist in this field?
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTION & UX -->
+<section id="interaction">
+  <div class="wrapper">
+    <div class="section-label">05 — Interaction Design & UX</div>
+    <h2 class="section-title">The Site Visitors<br>Remember is the One<br>That Moved</h2>
+    <p class="lead">Micro-interactions have matured from nice-to-have to expected. In 2026, the gap isn't between sites with and without animation — it's between sites with purposeful motion and sites with random sparkle.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-num">01</div>
+        <div class="card-title">Micro-Delight (Not Micro-Gimmick)</div>
+        <p>The subtle bounce of a button. A toggle that feels tactile. A form field that gently reacts to input. Libraries like React Bits and 21st.dev make purposeful motion accessible. The test: does this animation make the experience clearer and more pleasurable, or just busier? Only the former belongs on your site.</p>
+        <span class="tag">Baseline 2026</span>
+      </div>
+      <div class="card">
+        <div class="card-num">02</div>
+        <div class="card-title">Scroll-Triggered Storytelling</div>
+        <p>Use scroll position as a narrative device. Text reveals, parallax layers, sequence animations that unfold your story as the visitor reads. The best personal sites guide visitors through a deliberate experience rather than dumping information all at once. Scroll should feel like turning pages.</p>
+        <span class="tag">High Impact</span>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <div class="card-title">Cursor Personality</div>
+        <p>Custom cursors, magnetic hover effects, trailing particles — these make your site feel alive and handcrafted. They signal technical confidence immediately. Don't overdo it; one well-executed cursor effect beats five competing ones. It should feel like your site is aware of the visitor.</p>
+        <span class="tag">Differentiator</span>
+      </div>
+      <div class="card">
+        <div class="card-num">04</div>
+        <div class="card-title">Non-Linear Navigation</div>
+        <p>Top 2026 sites experiment with radial menus, hidden drawers, interactive maps, and nonlinear journeys. These aren't always appropriate — but for creative and technical personal sites, unconventional navigation demonstrates exactly the kind of thinking employers want to hire. Navigation can itself be a portfolio piece.</p>
+        <span class="tag">Creative Edge</span>
+      </div>
+      <div class="card">
+        <div class="card-num">05</div>
+        <div class="card-title">Conversational UI / AI Integration</div>
+        <p>Personality-first chat interfaces that feel like human copilots — context-aware, fast, with memory for returning visitors. Even on a personal site, an AI assistant that can answer "what has [you] built?" or "can [you] help with X?" creates a 24/7 interactive presence that static sites cannot match.</p>
+        <span class="tag">Advanced Play</span>
+      </div>
+      <div class="card">
+        <div class="card-num">06</div>
+        <div class="card-title">Sound Design</div>
+        <p>Sound is quietly becoming the next sense in digital design. Subtle UI sounds, ambient audio, hover tones — used restrainedly, they create atmosphere and differentiation. This is still emerging, but early adopters who nail tasteful audio design will be remembered. The key word is "subtle." Always provide mute controls.</p>
+        <span class="tag">Emerging</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p>A working website is not a good portfolio. A memorable experience is. Bruno Simon navigating a portfolio by driving a 3D car. Jordan Cruz-Correa's functional Windows 98 nostalgia environment. These sites don't just show technical skill — they demonstrate creative vision, execution quality, and personality simultaneously.</p>
+      <cite>— Analysis of Awwwards-winning personal portfolios, 2025–2026</cite>
+    </div>
+  </div>
+</section>
+
+<!-- SEO -->
+<section id="seo">
+  <div class="wrapper">
+    <div class="section-label">06 — SEO & Discoverability</div>
+    <h2 class="section-title">Being Found in the Age<br>of AI Search</h2>
+    <p class="lead">In 2026, you're not just optimizing for Google's crawler. You're optimizing for AI agents, Generative Engine results, and the machines that now recommend humans to other humans. This is a new game.</p>
+
+    <div class="two-col">
+      <div>
+        <h3 class="sub-head">Traditional SEO Still Matters</h3>
+        <ul class="checklist" style="grid-template-columns: 1fr;">
+          <li>Custom domain name (yourname.com) — professional baseline</li>
+          <li>Semantic HTML structure with proper heading hierarchy</li>
+          <li>Structured data / JSON-LD for Person, Project, Article schemas</li>
+          <li>E-E-A-T signals: Experience, Expertise, Authoritativeness, Trust</li>
+          <li>Internal linking between case studies, blog posts, and project pages</li>
+          <li>Meta titles and descriptions optimized for click-through</li>
+          <li>robots.txt configured to block training scrapers, allow legitimate search bots</li>
+          <li>Sitemap submitted to Google Search Console</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="sub-head">GEO: Generative Engine Optimization (NEW)</h3>
+        <p style="font-size:13px; color: var(--muted); margin-bottom:16px; line-height:1.7;">As AI agents increasingly recommend and filter information on behalf of users, your site must be readable by machines as well as humans. This is the MX (Machine Experience) era.</p>
+        <ul class="checklist" style="grid-template-columns: 1fr;">
+          <li>BLUF method: Bottom Line Up Front. Core answer in the first sentence.</li>
+          <li>Short, well-defined content chunks — easy for LLMs to retrieve via RAG</li>
+          <li>Avoid burying key info in PDFs, iframes, or JavaScript-only rendered content</li>
+          <li>Schema markup that matches visible page content exactly</li>
+          <li>Clear entity associations: who you are, what you do, what you've built</li>
+          <li>Content that cites sources, includes specific numbers, and demonstrates expertise</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>The MX Era: Designing for Machines</strong>
+      Websites are no longer built only for people. AI search agents read, interpret, and summarize your site on behalf of potential employers, clients, and collaborators. If your site's meaning, hierarchy, and expertise signals aren't machine-readable, you're invisible in the AI-mediated web.
+    </div>
+  </div>
+</section>
+
+<!-- MASTER CHECKLIST -->
+<section id="checklist">
+  <div class="wrapper">
+    <div class="section-label">07 — Master Checklist</div>
+    <h2 class="section-title">Ship This or Don't Ship</h2>
+    <p class="lead">Every item below is either a hard requirement or a high-leverage differentiator for a personal website in 2026. Sort yourself accordingly.</p>
+
+    <table class="tier-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Requirement</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Foundation</strong></td><td>Custom domain (yourname.com/.dev/.me)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>HTTPS / SSL cert active</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>Edge hosting or CDN (Vercel, Cloudflare, Netlify)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>LCP under 2.5s on mobile</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>INP under 200ms</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>CLS under 0.1</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>Images in WebP/AVIF with srcset</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>Mobile-first responsive design</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td><strong>Design</strong></td><td>Distinctive, custom typography (NOT Inter, Arial, system-ui)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>Committed, cohesive color palette</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>One unforgettable visual element (hero animation, custom cursor, etc.)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>Dark mode support</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td></td><td>Micro-interactions (hover states, scroll reveals)</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td></td><td>3D element or WebGL effect</td><td><span class="badge nice">Nice</span></td></tr>
+        <tr><td></td><td>Custom cursor or magnetic hover</td><td><span class="badge nice">Nice</span></td></tr>
+        <tr><td><strong>Content</strong></td><td>A compelling, personal About section</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>Project case studies (not just screenshots + links)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>Contact / collaboration CTA that's prominent</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>Blog or writing section (establishes expertise)</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td></td><td>Social proof: testimonials, press, collaborators</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td></td><td>Newsletter or community link</td><td><span class="badge nice">Nice</span></td></tr>
+        <tr><td><strong>SEO / GEO</strong></td><td>Semantic HTML with proper heading structure</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td></td><td>JSON-LD structured data (Person schema)</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td></td><td>BLUF content structure (answer first, context after)</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td></td><td>robots.txt configured for AI bots</td><td><span class="badge nice">Nice</span></td></tr>
+        <tr><td><strong>Advanced</strong></td><td>AI assistant / conversational UI</td><td><span class="badge nice">Nice</span></td></tr>
+        <tr><td></td><td>Real-time personalization based on referrer or history</td><td><span class="badge nice">Nice</span></td></tr>
+        <tr><td></td><td>Sound design (subtle, with mute option)</td><td><span class="badge nice">Nice</span></td></tr>
+        <tr><td></td><td>Lighthouse CI in deployment pipeline</td><td><span class="badge should">Should</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WHAT KILLS SITES -->
+<section id="killers">
+  <div class="wrapper">
+    <div class="section-label">08 — What Kills Sites</div>
+    <h2 class="section-title">The Graveyard of<br>Forgettable Websites</h2>
+    <p class="lead">Every one of these is a fatal signal that this person either doesn't know what they're doing, or doesn't care. Either is disqualifying.</p>
+
+    <div class="two-col">
+      <div>
+        <h3 class="sub-head">Design Deaths</h3>
+        <ul class="kill-list">
+          <li>Using Inter, Arial, or system fonts as primary typeface</li>
+          <li>Purple gradient on white background (the default AI aesthetic)</li>
+          <li>Generic hero: "Hi, I'm [Name]. I build things." with stock photo background</li>
+          <li>Template layouts with zero personalization</li>
+          <li>Animations that serve zero purpose (spinning logos)</li>
+          <li>More than 3 competing fonts that don't harmonize</li>
+          <li>Desktop-only design that breaks on mobile</li>
+          <li>Lack of visual hierarchy — everything feels equally important</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="sub-head">Technical Deaths</h3>
+        <ul class="kill-list">
+          <li>Load time over 3 seconds on mobile</li>
+          <li>No HTTPS (signals technical incompetence immediately)</li>
+          <li>Images not compressed or in legacy formats</li>
+          <li>No domain — using a platform subdomain (yourname.wixsite.com)</li>
+          <li>Layout shift during load (CLS failure)</li>
+          <li>404 errors on linked projects</li>
+          <li>Not mobile responsive — requires pinch-to-zoom</li>
+          <li>Heavy JavaScript blocking page interaction</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:32px;">
+      <div>
+        <h3 class="sub-head">Content Deaths</h3>
+        <ul class="kill-list">
+          <li>List of technologies with no context or proof</li>
+          <li>About section that reads like a LinkedIn summary</li>
+          <li>Projects section with only titles and GitHub links (no story)</li>
+          <li>Generic "passionate about technology" language</li>
+          <li>No contact information or buried CTA</li>
+          <li>Last updated 2+ years ago — signals abandonment</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="sub-head">Branding Deaths</h3>
+        <ul class="kill-list">
+          <li>No recognizable visual identity — could be anyone's site</li>
+          <li>Inconsistent color/font usage across pages</li>
+          <li>Social links that go to inactive profiles</li>
+          <li>No single memorable thing — what do they remember you for?</li>
+          <li>Copying someone else's portfolio design exactly</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CALLOUT -->
+<div style="background: var(--rust); padding: 80px 60px; text-align:center;">
+  <p style="font-family: 'Syne', sans-serif; font-size: clamp(24px, 4vw, 52px); font-weight: 800; color: white; line-height: 1.05; letter-spacing: -1.5px; max-width: 800px; margin: 0 auto;">
+    A top-notch personal website in 2026 is not a portfolio. It is a declaration of who you are, what you can do, and why the world should care — delivered in under 2.5 seconds, on any device, to any human or machine that encounters it.
+  </p>
+  <p style="margin-top: 32px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.6);">Now go build it.</p>
+</div>
+
+<footer>
+  <div>Research compiled — <span>February 2026</span></div>
+  <div>Sources: Elementor · Figma · Awwwards · Muzli · Wix · Lovable · TheeDigital · VistaPrint · The Branding Journal · Deloitte × Google · ALMCorp · White Label Coders</div>
+</footer>
+
+</body>
+</html>
