@@ -120,31 +120,6 @@ const SectionHead = ({ n, title, color }) => (
   </div>
 );
 
-const DataRow = ({ label, val, sub, bar, barColor, highlight }) => (
-  <div style={{
-    display:"grid", gridTemplateColumns:"1fr 140px",
-    gap:"16px",
-    borderBottom:`1px solid ${C.bd}`,
-    alignItems:"center",
-    background: highlight ? `${C.acc}0a` : "transparent",
-    margin: highlight ? "0 -16px" : "0",
-    padding: highlight ? "14px 16px" : "14px 0",
-  }}>
-    <div>
-      <div style={{ fontSize:"13px", color:C.text, fontWeight: highlight ? 700 : 400 }}>{label}</div>
-      {sub && <div style={{ fontSize:"11px", color:C.muted, marginTop:"2px" }}>{sub}</div>}
-    </div>
-    <div style={{ textAlign:"right" }}>
-      <div style={{ fontFamily:"'Syne',sans-serif", fontWeight:700, fontSize:"15px", color:barColor||C.dark }}>{val}</div>
-      {bar !== undefined && (
-        <div style={{ height:"2px", background:C.bd, marginTop:"4px", width:"100%" }}>
-          <div style={{ height:"100%", background:barColor||C.acc, width:`${bar}%` }}/>
-        </div>
-      )}
-    </div>
-  </div>
-);
-
 /* ── EXPANDABLE SECTION ── */
 const Expand = ({ title, children, accent }) => {
   const [open, setOpen] = useState(false);
