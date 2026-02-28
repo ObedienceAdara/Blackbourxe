@@ -123,7 +123,7 @@ const SectionHead = ({ n, title, color }) => (
 const DataRow = ({ label, val, sub, bar, barColor, highlight }) => (
   <div style={{
     display:"grid", gridTemplateColumns:"1fr 140px",
-    gap:"16px", padding:"14px 0",
+    gap:"16px",
     borderBottom:`1px solid ${C.bd}`,
     alignItems:"center",
     background: highlight ? `${C.acc}0a` : "transparent",

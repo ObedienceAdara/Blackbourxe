@@ -47,6 +47,7 @@ const NewsletterPage = () => {
     .then(response => {
       if (response.ok) {
         setSubmitted(true);
+        trackNewsletterSignup('newsletter_page');
       } else {
         setError("Something went wrong. Please try again.");
       }
