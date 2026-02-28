@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { T } from '../constants/designTokens';
 import { POSTS } from '../constants/data';
@@ -35,6 +35,7 @@ const blogPostComponents = {
 
 const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
   const { slug } = useParams();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   
   // Use post from props if available, otherwise find by slug from URL
   const post = propPost || POSTS.find(p => p.slug === slug);
@@ -45,6 +46,13 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
       document.title = `${post.title} — Blackbourxe`;
       trackBlogPostView(post.title);
     }
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [post]);
   
   // If no post found, redirect to research page
@@ -109,7 +117,7 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
     <div style={{ paddingTop: "64px" }}>
       {/* Back nav */}
       <div style={{
-        padding: "20px 48px",
+        padding: isMobile ? "16px 24px" : "20px 48px",
         borderBottom: `1px solid ${T.border}`,
         display: "flex", alignItems: "center", gap: "16px",
       }}>
@@ -125,7 +133,7 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
 
       {/* Article Header */}
       <div style={{
-        padding: "64px 48px 48px",
+        padding: isMobile ? "48px 24px 32px" : "64px 48px 48px",
         background: `radial-gradient(ellipse at 80% 0%, rgba(240,255,68,0.03) 0%, transparent 50%)`,
         borderBottom: `1px solid ${T.border}`,
       }}>
@@ -143,20 +151,22 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
 
           <h1 style={{
             fontFamily: "'Syne', sans-serif",
-            fontSize: "clamp(28px, 4vw, 52px)",
+            fontSize: isMobile ? "clamp(24px, 6vw, 36px)" : "clamp(28px, 4vw, 52px)",
             fontWeight: 800, letterSpacing: "-2px",
             lineHeight: 1.05, marginBottom: "24px",
           }}>{post.title}</h1>
 
           <p style={{
             fontFamily: "'Instrument Serif', serif", fontStyle: "italic",
-            fontSize: "20px", color: T.muted, lineHeight: 1.6, marginBottom: "32px",
+            fontSize: isMobile ? "16px" : "20px", color: T.muted, lineHeight: 1.6, marginBottom: "32px",
           }}>{post.excerpt}</p>
 
           <div style={{
-            display: "flex", gap: "32px", alignItems: "center",
+            display: "flex", 
+            gap: isMobile ? "16px" : "32px", 
             paddingTop: "24px", borderTop: `1px solid ${T.border}`,
-            flexWrap: "wrap",
+            flexDirection: isMobile ? "column" : "row",
+            alignItems: isMobile ? "flex-start" : "center",
           }}>
             <div style={{ display: "flex", gap: "24px" }}>
               <span style={{ fontSize: "11px", color: T.muted, letterSpacing: "0.08em" }}>⏱ {post.readTime} read</span>
@@ -168,12 +178,12 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
       </div>
 
       {/* Article Body */}
-      <div style={{ padding: "60px 48px", maxWidth: "860px", margin: "0 auto" }}>
+      <div style={{ padding: isMobile ? "40px 24px" : "60px 48px", maxWidth: "860px", margin: "0 auto" }}>
         {/* Key Takeaway Box */}
         <div style={{
           background: T.surface, border: `1px solid ${T.border}`,
           borderLeft: `3px solid ${T.accent}`,
-          padding: "24px 28px", marginBottom: "48px",
+          padding: isMobile ? "20px 24px" : "24px 28px", marginBottom: "48px",
         }}>
           <div style={{
             fontFamily: "'Syne', sans-serif", fontSize: "9px", fontWeight: 700,
@@ -190,7 +200,7 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
           <div key={i} style={{ marginBottom: "48px" }}>
             <h2 style={{
               fontFamily: "'Syne', sans-serif",
-              fontSize: "22px", fontWeight: 700,
+              fontSize: isMobile ? "18px" : "22px", fontWeight: 700,
               letterSpacing: "-0.5px", lineHeight: 1.2,
               marginBottom: "16px", color: T.text,
               paddingBottom: "12px", borderBottom: `1px solid ${T.border}`,
@@ -209,15 +219,22 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
         {/* Stats callout */}
         <div style={{
           background: T.bg, border: `1px solid ${T.border}`,
-          padding: "36px", marginBottom: "48px",
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px",
+          padding: isMobile ? "24px" : "36px", marginBottom: "48px",
+          display: "grid", 
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", 
+          gap: "1px",
         }}>
           {[
             { n: `${post.demand}%`, l: "Demand Score" },
             { n: "2026", l: "Research Year" },
             { n: post.readTime, l: "Read Time" },
           ].map((s, i) => (
-            <div key={i} style={{ padding: "20px", textAlign: "center", borderRight: i < 2 ? `1px solid ${T.border}` : "none" }}>
+            <div key={i} style={{ 
+              padding: isMobile ? "16px" : "20px", 
+              textAlign: "center", 
+              borderRight: (i < 2 && !isMobile) ? `1px solid ${T.border}` : "none",
+              borderBottom: (i < 2 && isMobile) ? `1px solid ${T.border}` : "none"
+            }}>
               <div style={{
                 fontFamily: "'Syne', sans-serif", fontSize: "28px",
                 fontWeight: 800, letterSpacing: "-1px", color: T.accent,
@@ -230,7 +247,7 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
         {/* CTA */}
         <div style={{
           background: T.surface, border: `1px solid ${T.border}`,
-          padding: "36px", textAlign: "center",
+          padding: isMobile ? "28px 24px" : "36px", textAlign: "center",
         }}>
           <div style={{
             fontFamily: "'Syne', sans-serif", fontSize: "10px", fontWeight: 700,
@@ -247,13 +264,18 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
       {/* Related Posts */}
       {related.length > 0 && (
         <div style={{
-          padding: "60px 48px",
+          padding: isMobile ? "40px 24px" : "60px 48px",
           borderTop: `1px solid ${T.border}`,
           background: T.surface,
         }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <SectionLabel>More in {post.category}</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: T.border }}>
+            <div style={{ 
+              display: "grid", 
+              gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", 
+              gap: "1px", 
+              background: T.border 
+            }}>
               {related.map(p => (
                 <div key={p.id} style={{ background: T.bg }}>
                   <PostCard post={p} onView={rp => { setCurrentPost(rp); setPage(`blog/${rp.slug}`); window.scrollTo(0, 0); }} />

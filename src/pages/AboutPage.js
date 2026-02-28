@@ -1,23 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { T } from '../constants/designTokens';
 import SectionLabel from '../components/shared/SectionLabel';
 
 const AboutPage = ({ setPage }) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
   useEffect(() => {
     document.title = 'About — Blackbourxe';
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
   <div style={{ paddingTop: "64px" }}>
     <div style={{
-      padding: "80px 48px",
+      padding: isMobile ? "60px 24px" : "80px 48px",
       background: `radial-gradient(ellipse at 20% 100%, rgba(0,180,255,0.03) 0%, transparent 50%)`,
     }}>
       <div style={{ maxWidth: "960px", margin: "0 auto" }}>
         <SectionLabel>About Blackbourxe</SectionLabel>
         <h1 style={{
           fontFamily: "'Syne', sans-serif",
-          fontSize: "clamp(40px, 6vw, 80px)",
+          fontSize: isMobile ? "clamp(32px, 10vw, 56px)" : "clamp(40px, 6vw, 80px)",
           fontWeight: 800, letterSpacing: "-3px",
           lineHeight: 0.95, marginBottom: "40px",
         }}>
@@ -25,18 +34,24 @@ const AboutPage = ({ setPage }) => {
           <span style={{ color: "rgba(232,227,216,0.25)" }}>not readers.</span>
         </h1>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "60px", alignItems: "start", marginBottom: "80px" }}>
+        <div style={{ 
+          display: "grid", 
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", 
+          gap: isMobile ? "40px" : "60px", 
+          alignItems: "start", 
+          marginBottom: isMobile ? "60px" : "80px" 
+        }}>
           <div>
             <p style={{
               fontFamily: "'Instrument Serif', serif", fontStyle: "italic",
-              fontSize: "20px", lineHeight: 1.65, color: T.muted, marginBottom: "24px",
+              fontSize: isMobile ? "18px" : "20px", lineHeight: 1.65, color: T.muted, marginBottom: "24px",
             }}>
               Blackbourxe is an intelligence publishing brand. Not a blog. Not a newsletter. A research operation — built on the belief that the people building things deserve better than recycled takes and watered-down summaries.
             </p>
-            <p style={{ fontSize: "14px", lineHeight: 1.85, color: T.muted, marginBottom: "20px" }}>
+            <p style={{ fontSize: isMobile ? "13px" : "14px", lineHeight: 1.85, color: T.muted, marginBottom: "20px" }}>
               Every brief published on Blackbourxe is original research — sourced from primary data, academic literature, and real-world operator experience. We cite everything. We update when the evidence changes. We say "we don't know" when we don't know.
             </p>
-            <p style={{ fontSize: "14px", lineHeight: 1.85, color: T.muted }}>
+            <p style={{ fontSize: isMobile ? "13px" : "14px", lineHeight: 1.85, color: T.muted }}>
               The name is a signal: this is not a soft space. It's a place for rigorous thinking, honest analysis, and intelligence that changes how you act — not just how you feel.
             </p>
           </div>
@@ -47,7 +62,7 @@ const AboutPage = ({ setPage }) => {
               { label: "Audience", value: "Founders, engineers, operators, students, and anyone who acts on intelligence." },
               { label: "Frequency", value: "New research weekly. Newsletter every Tuesday." },
             ].map(item => (
-              <div key={item.label} style={{ background: T.surface, padding: "24px 28px" }}>
+              <div key={item.label} style={{ background: T.surface, padding: isMobile ? "20px 24px" : "24px 28px" }}>
                 <div style={{
                   fontFamily: "'Syne', sans-serif", fontWeight: 700,
                   fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase",
@@ -62,7 +77,7 @@ const AboutPage = ({ setPage }) => {
         {/* Expertise areas */}
         <div style={{ marginBottom: "60px" }}>
           <SectionLabel>Areas of Expertise</SectionLabel>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: T.border, border: `1px solid ${T.border}` }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "1px", background: T.border, border: `1px solid ${T.border}` }}>
             {[
               { cat: "AI & Machine Learning", desc: "Model architecture, deployment, agents, safety, and the business of AI.", color: T.green },
               { cat: "Startup & Business Strategy", desc: "PMF, fundraising, unit economics, GTM, and what actually builds durable companies.", color: T.orange },
@@ -71,7 +86,7 @@ const AboutPage = ({ setPage }) => {
               { cat: "Career & Professional", desc: "Tech careers, negotiation, personal brand, and skill development in the AI era.", color: T.accent },
               { cat: "Society & Future", desc: "The cultural, economic, and ethical implications of the technology being built.", color: T.purple },
             ].map(item => (
-              <div key={item.cat} style={{ background: T.surface, padding: "28px" }}>
+              <div key={item.cat} style={{ background: T.surface, padding: isMobile ? "24px" : "28px" }}>
                 <div style={{ width: "24px", height: "2px", background: item.color, marginBottom: "16px" }} />
                 <div style={{
                   fontFamily: "'Syne', sans-serif", fontWeight: 700,
@@ -84,7 +99,12 @@ const AboutPage = ({ setPage }) => {
         </div>
 
         {/* CTA row */}
-        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+        <div style={{ 
+          display: "flex", 
+          gap: "12px", 
+          flexDirection: isMobile ? "column" : "row",
+          flexWrap: "wrap" 
+        }}>
           <button onClick={() => setPage("research")} style={{
             background: T.accent, color: T.bg, border: "none",
             padding: "14px 28px", cursor: "pointer",

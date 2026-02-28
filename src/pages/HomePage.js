@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { T } from '../constants/designTokens';
 import { POSTS } from '../constants/data';
 import SectionLabel from '../components/shared/SectionLabel';
@@ -6,9 +6,21 @@ import PostCard from '../components/shared/PostCard';
 import NewsletterInline from '../components/shared/NewsletterInline';
 
 const HomePage = ({ setPage, setCurrentPost }) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth <= 1024);
+
   useEffect(() => {
     document.title = 'Blackbourxe — Research Without the Noise';
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      setIsTablet(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
+  
   const featuredPosts = POSTS.filter(p => p.featured);
   const recentPosts = POSTS.filter(p => !p.featured).slice(0, 6);
 
@@ -17,7 +29,7 @@ const HomePage = ({ setPage, setCurrentPost }) => {
       {/* HERO */}
       <section style={{
         minHeight: "100vh", display: "flex", flexDirection: "column",
-        justifyContent: "flex-end", padding: "120px 48px 80px",
+        justifyContent: "flex-end", padding: isMobile ? "80px 20px 60px" : "120px 48px 80px",
         position: "relative", overflow: "hidden",
         background: `radial-gradient(ellipse at 80% 0%, rgba(240,255,68,0.04) 0%, transparent 60%), 
                      radial-gradient(ellipse at 0% 100%, rgba(0,180,255,0.03) 0%, transparent 50%)`,
@@ -64,16 +76,16 @@ const HomePage = ({ setPage, setCurrentPost }) => {
           <div className="fade-up-3" style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
             <button onClick={() => setPage("research")} style={{
               background: T.accent, color: T.bg, border: "none",
-              padding: "14px 28px", cursor: "pointer",
+              padding: isMobile ? "12px 20px" : "14px 28px", cursor: "pointer",
               fontFamily: "'Syne', sans-serif", fontWeight: 700,
-              fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase",
+              fontSize: isMobile ? "11px" : "12px", letterSpacing: "0.1em", textTransform: "uppercase",
             }}>Browse All Research →</button>
             <button onClick={() => setPage("newsletter")} style={{
               background: "transparent", color: T.text,
               border: `1px solid ${T.border}`,
-              padding: "14px 28px", cursor: "pointer",
+              padding: isMobile ? "12px 20px" : "14px 28px", cursor: "pointer",
               fontFamily: "'DM Mono', monospace",
-              fontSize: "11px", letterSpacing: "0.08em",
+              fontSize: isMobile ? "10px" : "11px", letterSpacing: "0.08em",
             }}>Get Weekly Briefs</button>
           </div>
         </div>
@@ -81,9 +93,10 @@ const HomePage = ({ setPage, setCurrentPost }) => {
         {/* Stats row */}
         <div style={{
           position: "relative", zIndex: 1,
-          display: "flex", gap: "0",
-          marginTop: "80px", background: T.surface,
-          border: `1px solid ${T.border}`,
+          display: "grid", 
+          gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
+          gap: "1px", background: T.border,
+          marginTop: "80px", border: `1px solid ${T.border}`,
         }}>
           {[
             { n: "70+", l: "Research Briefs" },
@@ -92,11 +105,10 @@ const HomePage = ({ setPage, setCurrentPost }) => {
             { n: "Free", l: "Forever Accessible" },
           ].map((s, i) => (
             <div key={i} style={{
-              flex: 1, padding: "24px 28px",
-              borderRight: i < 3 ? `1px solid ${T.border}` : "none",
+              background: T.surface, padding: isMobile ? "20px 24px" : "24px 28px",
             }}>
               <div style={{
-                fontFamily: "'Syne', sans-serif", fontSize: "28px",
+                fontFamily: "'Syne', sans-serif", fontSize: isMobile ? "24px" : "28px",
                 fontWeight: 800, letterSpacing: "-1px", color: T.text,
                 lineHeight: 1,
               }}>{s.n}</div>
@@ -109,38 +121,44 @@ const HomePage = ({ setPage, setCurrentPost }) => {
         </div>
       </section>
 
-      {/* MARQUEE TICKER */}
-      <div style={{
-        background: T.accent, padding: "12px 0",
-        overflow: "hidden", borderTop: `1px solid ${T.bg}`,
-      }}>
-        <div className="marquee-inner" style={{ display: "flex", gap: "64px" }}>
-          {[...Array(2)].map((_, i) => (
-            <div key={i} style={{ display: "flex", gap: "64px" }}>
-              {["AI Strategy","Business Intelligence","Tech Deep-Dives","Money & Finance","Career Playbooks","Startup Research","2026 Trends"].map(t => (
-                <span key={t} style={{
-                  fontFamily: "'Syne', sans-serif", fontWeight: 700,
-                  fontSize: "11px", letterSpacing: "0.2em", textTransform: "uppercase",
-                  color: T.bg, whiteSpace: "nowrap",
-                }}>
-                  {t} <span style={{ opacity: 0.4 }}>◆</span>
-                </span>
-              ))}
-            </div>
-          ))}
+      {/* MARQUEE TICKER - Hide on very small screens */}
+      {!isMobile && (
+        <div style={{
+          background: T.accent, padding: "12px 0",
+          overflow: "hidden", borderTop: `1px solid ${T.bg}`,
+        }}>
+          <div className="marquee-inner" style={{ display: "flex", gap: "64px" }}>
+            {[...Array(2)].map((_, i) => (
+              <div key={i} style={{ display: "flex", gap: "64px" }}>
+                {["AI Strategy","Business Intelligence","Tech Deep-Dives","Money & Finance","Career Playbooks","Startup Research","2026 Trends"].map(t => (
+                  <span key={t} style={{
+                    fontFamily: "'Syne', sans-serif", fontWeight: 700,
+                    fontSize: "11px", letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: T.bg, whiteSpace: "nowrap",
+                  }}>
+                    {t} <span style={{ opacity: 0.4 }}>◆</span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* FEATURED POSTS */}
-      <section style={{ padding: "80px 48px" }}>
+      <section style={{ padding: isMobile ? "60px 20px" : "80px 48px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <SectionLabel>Featured Research</SectionLabel>
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "1px", background: T.border }}>
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: isMobile ? "1fr" : isTablet ? "1fr 1fr" : "2fr 1fr 1fr",
+            gap: "1px", background: T.border 
+          }}>
             {featuredPosts.map((post, i) => (
               <div key={post.id} style={{ background: T.bg }}>
                 <PostCard
                   post={post}
-                  featured={i === 0}
+                  featured={i === 0 && !isMobile && !isTablet}
                   onView={p => { setCurrentPost(p); setPage(`blog/${p.slug}`); }}
                 />
               </div>
@@ -150,10 +168,14 @@ const HomePage = ({ setPage, setCurrentPost }) => {
       </section>
 
       {/* CATEGORIES */}
-      <section style={{ padding: "0 48px 80px" }}>
+      <section style={{ padding: isMobile ? "0 20px 60px" : "0 48px 80px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <SectionLabel>Research Domains</SectionLabel>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "1px", background: T.border, border: `1px solid ${T.border}` }}>
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(3, 1fr)" : "repeat(7, 1fr)",
+            gap: "1px", background: T.border, border: `1px solid ${T.border}` 
+          }}>
             {Object.entries({
               AI: { text: T.green },
               Business: { text: T.orange },
@@ -167,7 +189,7 @@ const HomePage = ({ setPage, setCurrentPost }) => {
                 key={cat}
                 onClick={() => setPage("research")}
                 style={{
-                  background: T.surface, padding: "28px 20px",
+                  background: T.surface, padding: isMobile ? "20px 16px" : "28px 20px",
                   cursor: "pointer", transition: "background 0.15s",
                   textAlign: "center",
                 }}
@@ -180,7 +202,7 @@ const HomePage = ({ setPage, setCurrentPost }) => {
                 }} />
                 <div style={{
                   fontFamily: "'Syne', sans-serif", fontWeight: 700,
-                  fontSize: "13px", color: c.text, marginBottom: "6px",
+                  fontSize: isMobile ? "12px" : "13px", color: c.text, marginBottom: "6px",
                 }}>{cat}</div>
                 <div style={{
                   fontSize: "10px", color: T.muted, letterSpacing: "0.08em",
@@ -194,19 +216,30 @@ const HomePage = ({ setPage, setCurrentPost }) => {
       </section>
 
       {/* RECENT POSTS GRID */}
-      <section style={{ padding: "0 48px 80px", background: T.surface }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", paddingTop: "60px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "32px" }}>
+      <section style={{ padding: isMobile ? "40px 20px 60px" : "0 48px 80px", background: T.surface }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", paddingTop: isMobile ? "0" : "60px" }}>
+          <div style={{ 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "baseline", 
+            marginBottom: "32px",
+            flexDirection: isMobile ? "column" : "row",
+            gap: isMobile ? "12px" : "0"
+          }}>
             <div>
               <SectionLabel>Latest Briefs</SectionLabel>
             </div>
             <button onClick={() => setPage("research")} style={{
               background: "none", border: "none", cursor: "pointer",
               color: T.accent, fontFamily: "'DM Mono', monospace",
-              fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase",
+              fontSize: isMobile ? "10px" : "11px", letterSpacing: "0.1em", textTransform: "uppercase",
             }}>View All 70+ →</button>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: T.border }}>
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+            gap: "1px", background: T.border 
+          }}>
             {recentPosts.map(post => (
               <div key={post.id} style={{ background: T.bg }}>
                 <PostCard
@@ -221,7 +254,7 @@ const HomePage = ({ setPage, setCurrentPost }) => {
 
       {/* NEWSLETTER CTA */}
       <section style={{
-        padding: "100px 48px",
+        padding: isMobile ? "60px 20px" : "100px 48px",
         background: T.bg,
         position: "relative", overflow: "hidden",
       }}>
@@ -235,7 +268,7 @@ const HomePage = ({ setPage, setCurrentPost }) => {
           <SectionLabel color={T.accent}>Weekly Intelligence Brief</SectionLabel>
           <h2 style={{
             fontFamily: "'Syne', sans-serif",
-            fontSize: "clamp(32px, 5vw, 56px)",
+            fontSize: isMobile ? "clamp(28px, 7vw, 48px)" : "clamp(32px, 5vw, 56px)",
             fontWeight: 800, letterSpacing: "-2px",
             lineHeight: 1, marginBottom: "20px",
           }}>
@@ -243,7 +276,7 @@ const HomePage = ({ setPage, setCurrentPost }) => {
           </h2>
           <p style={{
             fontFamily: "'Instrument Serif', serif", fontStyle: "italic",
-            fontSize: "18px", color: T.muted, lineHeight: 1.6, marginBottom: "36px",
+            fontSize: isMobile ? "16px" : "18px", color: T.muted, lineHeight: 1.6, marginBottom: "36px",
           }}>
             One deep research brief per week — the signal your competitors are missing.
             Read by founders, builders, and operators who don't have time for noise.
@@ -259,8 +292,8 @@ const HomePage = ({ setPage, setCurrentPost }) => {
 
       {/* CONSULTATION TEASER */}
       <section style={{
-        background: T.accent, padding: "80px 48px",
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: "60px", alignItems: "center",
+        background: T.accent, padding: isMobile ? "60px 20px" : isTablet ? "80px 48px" : "80px 48px",
+        display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? "40px" : "60px", alignItems: "center",
       }}>
         <div>
           <div style={{
@@ -270,14 +303,14 @@ const HomePage = ({ setPage, setCurrentPost }) => {
           }}>Expert Consultation</div>
           <h2 style={{
             fontFamily: "'Syne', sans-serif",
-            fontSize: "clamp(28px, 4vw, 48px)",
+            fontSize: isMobile ? "clamp(24px, 6vw, 40px)" : "clamp(28px, 4vw, 48px)",
             fontWeight: 800, letterSpacing: "-2px",
             lineHeight: 1, color: T.bg, marginBottom: "20px",
           }}>
             Need answers<br />specific to you?
           </h2>
           <p style={{
-            fontSize: "14px", lineHeight: 1.8,
+            fontSize: isMobile ? "13px" : "14px", lineHeight: 1.8,
             color: "rgba(13,13,13,0.65)", maxWidth: "420px",
           }}>
             Book a 1-on-1 session for AI strategy, startup advice, career direction, or a deep-dive on any topic we cover. Strategic guidance from someone who's done the research.
@@ -290,21 +323,21 @@ const HomePage = ({ setPage, setCurrentPost }) => {
             { label: "Career Positioning", desc: "Tech job search, salary negotiation, personal brand." },
           ].map(item => (
             <div key={item.label} style={{
-              background: "rgba(13,13,13,0.06)", padding: "20px 24px",
+              background: "rgba(13,13,13,0.06)", padding: isMobile ? "16px 20px" : "20px 24px",
               border: "1px solid rgba(13,13,13,0.1)",
             }}>
               <div style={{
                 fontFamily: "'Syne', sans-serif", fontWeight: 700,
-                fontSize: "14px", color: T.bg, marginBottom: "4px",
+                fontSize: isMobile ? "13px" : "14px", color: T.bg, marginBottom: "4px",
               }}>{item.label}</div>
-              <div style={{ fontSize: "12px", color: "rgba(13,13,13,0.55)" }}>{item.desc}</div>
+              <div style={{ fontSize: isMobile ? "11px" : "12px", color: "rgba(13,13,13,0.55)" }}>{item.desc}</div>
             </div>
           ))}
           <button onClick={() => setPage("consultation")} style={{
             background: T.bg, color: T.accent, border: "none",
             padding: "16px", cursor: "pointer",
             fontFamily: "'Syne', sans-serif", fontWeight: 700,
-            fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase",
+            fontSize: isMobile ? "11px" : "12px", letterSpacing: "0.1em", textTransform: "uppercase",
             marginTop: "8px",
           }}>Book a Session →</button>
         </div>

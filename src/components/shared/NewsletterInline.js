@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { T } from '../../constants/designTokens';
 import { trackNewsletterSignup } from '../../utils/analytics';
 
@@ -6,6 +6,16 @@ const NewsletterInline = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -59,7 +69,12 @@ const NewsletterInline = () => {
 
   return !submitted ? (
     <div>
-      <div style={{ display: "flex", gap: "0", maxWidth: "480px" }}>
+      <div style={{ 
+        display: "flex", 
+        gap: "0", 
+        maxWidth: "480px",
+        flexDirection: isMobile ? "column" : "row",
+      }}>
         <input
           value={email}
           onChange={e => {
@@ -72,8 +87,12 @@ const NewsletterInline = () => {
           style={{
             flex: 1, background: T.surface2, 
             border: `1px solid ${error ? T.red : T.border}`,
-            borderRight: "none", padding: "12px 16px", color: T.text,
-            fontFamily: "'DM Mono', monospace", fontSize: "13px", outline: "none",
+            borderRight: isMobile ? "1px solid" : "none",
+            borderColor: isMobile ? (error ? T.red : T.border) : (error ? T.red : T.border),
+            padding: "12px 16px", color: T.text,
+            fontFamily: "'DM Mono', monospace", fontSize: "13px", 
+            outline: "none",
+            boxSizing: "border-box",
           }}
         />
         <button
@@ -83,6 +102,8 @@ const NewsletterInline = () => {
             padding: "12px 20px", cursor: "pointer",
             fontFamily: "'Syne', sans-serif", fontWeight: 700,
             fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase",
+            width: isMobile ? "100%" : "auto",
+            marginTop: isMobile ? "8px" : "0",
           }}
         >Subscribe</button>
       </div>

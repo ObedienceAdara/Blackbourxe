@@ -4,8 +4,17 @@ import SectionLabel from '../components/shared/SectionLabel';
 import { trackNewsletterSignup } from '../utils/analytics';
 
 const NewsletterPage = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
   useEffect(() => {
     document.title = 'Newsletter — Blackbourxe';
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const [email, setEmail] = useState("");
@@ -71,7 +80,7 @@ const NewsletterPage = () => {
   return (
     <div style={{ paddingTop: "64px" }}>
       <div style={{
-        minHeight: "100vh", padding: "80px 48px",
+        minHeight: "100vh", padding: isMobile ? "60px 20px" : "80px 48px",
         background: `radial-gradient(ellipse at 50% 0%, rgba(240,255,68,0.04) 0%, transparent 60%)`,
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
@@ -80,7 +89,7 @@ const NewsletterPage = () => {
             <SectionLabel>Weekly Intelligence Brief</SectionLabel>
             <h1 style={{
               fontFamily: "'Syne', sans-serif",
-              fontSize: "clamp(36px, 5vw, 64px)",
+              fontSize: isMobile ? "clamp(32px, 8vw, 56px)" : "clamp(36px, 5vw, 64px)",
               fontWeight: 800, letterSpacing: "-2.5px",
               lineHeight: 0.95, marginBottom: "24px",
             }}>
@@ -88,7 +97,7 @@ const NewsletterPage = () => {
             </h1>
             <p style={{
               fontFamily: "'Instrument Serif', serif", fontStyle: "italic",
-              fontSize: "18px", lineHeight: 1.65, color: T.muted, marginBottom: "40px",
+              fontSize: isMobile ? "16px" : "18px", lineHeight: 1.65, color: T.muted, marginBottom: "40px",
             }}>
               The Blackbourxe Weekly Brief compresses the most important intelligence across AI, business, tech, and money into one focused reading. Cited. Actionable. Free.
             </p>
@@ -99,19 +108,22 @@ const NewsletterPage = () => {
                 fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase",
                 color: T.muted, marginBottom: "12px", fontFamily: "'DM Mono', monospace",
               }}>Personalize your brief (optional)</div>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                 {Object.keys(CAT_COLORS).map(cat => (
                   <button
                     key={cat}
                     onClick={() => toggleInterest(cat)}
                     style={{
-                      padding: "6px 14px", border: `1px solid`,
+                      padding: isMobile ? "5px 10px" : "6px 14px", 
+                      border: `1px solid`,
                       borderColor: interests.includes(cat) ? CAT_COLORS[cat].border : T.border,
                       background: interests.includes(cat) ? CAT_COLORS[cat].bg : "transparent",
                       color: interests.includes(cat) ? CAT_COLORS[cat].text : T.muted,
                       cursor: "pointer",
                       fontFamily: "'DM Mono', monospace",
-                      fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase",
+                      fontSize: isMobile ? "9px" : "10px", 
+                      letterSpacing: "0.1em", 
+                      textTransform: "uppercase",
                       transition: "all 0.15s",
                     }}
                   >{cat}</button>
@@ -121,7 +133,11 @@ const NewsletterPage = () => {
 
             {/* Email input */}
             <div style={{ marginBottom: "16px" }}>
-              <div style={{ display: "flex", gap: "0" }}>
+              <div style={{ 
+                display: "flex", 
+                gap: "0",
+                flexDirection: isMobile ? "column" : "row",
+              }}>
                 <input
                   value={email}
                   onChange={e => {
@@ -134,8 +150,12 @@ const NewsletterPage = () => {
                   style={{
                     flex: 1, background: T.surface, 
                     border: `1px solid ${error ? T.red : T.border}`,
-                    borderRight: "none", padding: "14px 20px", color: T.text,
-                    fontFamily: "'DM Mono', monospace", fontSize: "14px", outline: "none",
+                    borderRight: isMobile ? "1px solid" : "none", 
+                    borderColor: isMobile ? (error ? T.red : T.border) : (error ? T.red : T.border),
+                    padding: "14px 20px", color: T.text,
+                    fontFamily: "'DM Mono', monospace", fontSize: "14px", 
+                    outline: "none",
+                    boxSizing: "border-box",
                   }}
                 />
                 <button
@@ -144,7 +164,11 @@ const NewsletterPage = () => {
                     background: T.accent, color: T.bg, border: "none",
                     padding: "14px 24px", cursor: "pointer",
                     fontFamily: "'Syne', sans-serif", fontWeight: 700,
-                    fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase",
+                    fontSize: isMobile ? "10px" : "11px", 
+                    letterSpacing: "0.1em", 
+                    textTransform: "uppercase",
+                    width: isMobile ? "100%" : "auto",
+                    marginTop: isMobile ? "8px" : "0",
                   }}
                 >Subscribe →</button>
               </div>
@@ -166,12 +190,12 @@ const NewsletterPage = () => {
 
             {/* Social proof */}
             <div style={{
-              marginTop: "48px", padding: "24px 28px",
+              marginTop: "48px", padding: isMobile ? "20px 20px" : "24px 28px",
               background: T.surface, border: `1px solid ${T.border}`,
             }}>
               <div style={{
                 fontFamily: "'Instrument Serif', serif", fontStyle: "italic",
-                fontSize: "16px", color: T.text, lineHeight: 1.6, marginBottom: "12px",
+                fontSize: isMobile ? "14px" : "16px", color: T.text, lineHeight: 1.6, marginBottom: "12px",
               }}>
                 "The Blackbourxe brief is the only newsletter I open the same day it arrives. Dense, honest, and always actionable."
               </div>
@@ -203,7 +227,7 @@ const NewsletterPage = () => {
             border: `1px solid ${T.border}`,
             maxWidth: "500px",
             width: "100%",
-            padding: "60px 40px",
+            padding: isMobile ? "40px 24px" : "60px 40px",
             position: "relative",
             textAlign: "center",
           }}>
@@ -234,18 +258,18 @@ const NewsletterPage = () => {
             </button>
 
             <div style={{
-              fontFamily: "'Syne', sans-serif", fontSize: "80px",
+              fontFamily: "'Syne', sans-serif", fontSize: isMobile ? "64px" : "80px",
               fontWeight: 800, color: T.accent, letterSpacing: "-4px", lineHeight: 1,
               marginBottom: "24px",
             }}>✓</div>
             <h2 style={{
               fontFamily: "'Syne', sans-serif",
-              fontSize: "36px", fontWeight: 800,
+              fontSize: isMobile ? "28px" : "36px", fontWeight: 800,
               letterSpacing: "-1.5px", marginBottom: "16px",
             }}>You're in.</h2>
             <p style={{
               fontFamily: "'Instrument Serif', serif", fontStyle: "italic",
-              fontSize: "18px", color: T.muted, lineHeight: 1.6,
+              fontSize: isMobile ? "15px" : "18px", color: T.muted, lineHeight: 1.6,
             }}>
               First brief lands in your inbox this Tuesday. Welcome to the intelligence operation.
             </p>
