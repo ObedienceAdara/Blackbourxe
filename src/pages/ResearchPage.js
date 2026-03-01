@@ -110,10 +110,10 @@ const ResearchPage = ({ setPage, setCurrentPost }) => {
               style={{
                 background: "transparent", border: "none",
                 borderRight: `1px solid ${T.border}`,
-                padding: isMobile ? "0 16px" : "0 20px",
-                fontFamily: "'DM Mono', monospace", fontSize: "12px",
+                padding: isMobile ? "12px 16px" : "14px 24px",
+                fontFamily: "'DM Mono', monospace", fontSize: isMobile ? "13px" : "14px",
                 outline: "none",
-                width: isMobile ? "auto" : "220px",
+                width: isMobile ? "auto" : "300px",
                 flex: isMobile ? 1 : "none",
                 color: T.muted,
               }}
