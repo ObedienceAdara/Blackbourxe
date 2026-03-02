@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { T } from '../constants/designTokens';
 import SectionLabel from '../components/shared/SectionLabel';
+import { Instagram, Linkedin, Facebook } from 'lucide-react';
+import xLogo from '../assets/x.png';
+import threadsLogo from '../assets/threads.png';
+import substackLogo from '../assets/substack.png';
+import mediumLogo from '../assets/medium.png';
 
 const AboutPage = ({ setPage }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -94,6 +99,67 @@ const AboutPage = ({ setPage }) => {
                 }}>{item.cat}</div>
                 <div style={{ fontSize: "12px", lineHeight: 1.7, color: T.muted }}>{item.desc}</div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Stay Connected section */}
+        <div style={{ marginBottom: "48px", paddingTop: "48px", borderTop: `1px solid ${T.border}` }}>
+          <div style={{
+            fontFamily: "'DM Mono', monospace", fontSize: "10px",
+            letterSpacing: "0.2em", textTransform: "uppercase",
+            color: T.muted, marginBottom: "16px",
+          }}>Stay Connected</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
+            {[
+              { type: "image", src: xLogo, url: "https://x.com/blackbourxe", label: "X" },
+              { type: "icon", Icon: Instagram, url: "https://instagram.com/blackbourxe", label: "Instagram" },
+              { type: "icon", Icon: Linkedin, url: "https://linkedin.com/company/blackbourxe", label: "LinkedIn" },
+              { type: "image", src: threadsLogo, url: "https://threads.net/@blackbourxe", label: "Threads" },
+              { type: "image", src: substackLogo, url: "https://blackbourxe.substack.com", label: "Substack" },
+              { type: "image", src: mediumLogo, url: "https://medium.com/@blackbourxe", label: "Medium" },
+              { type: "icon", Icon: Facebook, url: "https://facebook.com/blackbourxe", label: "Facebook" },
+            ].map(social => (
+              <a
+                key={social.label}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={social.label}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: isMobile ? "36px" : "40px",
+                  height: isMobile ? "36px" : "40px",
+                  color: T.muted,
+                  textDecoration: "none",
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "4px",
+                  transition: "all 0.15s",
+                  padding: "4px",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = T.accent;
+                  e.currentTarget.style.borderColor = T.accent;
+                  e.currentTarget.style.background = "rgba(240,255,68,0.05)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = T.muted;
+                  e.currentTarget.style.borderColor = T.border;
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
+                {social.type === "image" ? (
+                  <img 
+                    src={social.src} 
+                    alt={social.label}
+                    style={{ width: isMobile ? "18px" : "20px", height: isMobile ? "18px" : "20px", objectFit: "contain" }}
+                  />
+                ) : (
+                  <social.Icon size={isMobile ? 18 : 20} strokeWidth={1.5} />
+                )}
+              </a>
             ))}
           </div>
         </div>

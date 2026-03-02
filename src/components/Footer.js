@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { T } from '../constants/designTokens';
 import NewsletterInline from './shared/NewsletterInline';
+import { Instagram, Linkedin, Facebook } from 'lucide-react';
+import xLogo from '../assets/x.png';
+import threadsLogo from '../assets/threads.png';
+import substackLogo from '../assets/substack.png';
+import mediumLogo from '../assets/medium.png';
 
 const Footer = ({ setPage }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -106,9 +111,68 @@ const Footer = ({ setPage }) => {
             <p style={{ fontSize: "12px", color: T.muted, lineHeight: 1.7, marginBottom: "16px" }}>
               briefs@blackbourxe.com
             </p>
-            <p style={{ fontSize: "12px", color: T.muted, lineHeight: 1.7 }}>
+            <p style={{ fontSize: "12px", color: T.muted, lineHeight: 1.7, marginBottom: "20px" }}>
               For collaboration, press, or research inquiries — reach out directly.
             </p>
+            <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: `1px solid ${T.border}` }}>
+              <div style={{
+                fontFamily: "'DM Mono', monospace", fontSize: "9px",
+                letterSpacing: "0.2em", textTransform: "uppercase",
+                color: T.muted, marginBottom: "12px",
+              }}>Follow</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                {[
+                  { type: "image", src: xLogo, url: "https://x.com/blackbourxe", label: "X" },
+                  { type: "icon", Icon: Instagram, url: "https://instagram.com/blackbourxe", label: "Instagram" },
+                  { type: "icon", Icon: Linkedin, url: "https://linkedin.com/company/blackbourxe", label: "LinkedIn" },
+                  { type: "image", src: threadsLogo, url: "https://threads.net/@blackbourxe", label: "Threads" },
+                  { type: "image", src: substackLogo, url: "https://blackbourxe.substack.com", label: "Substack" },
+                  { type: "image", src: mediumLogo, url: "https://medium.com/@blackbourxe", label: "Medium" },
+                  { type: "icon", Icon: Facebook, url: "https://facebook.com/blackbourxe", label: "Facebook" },
+                ].map(social => (
+                  <a
+                    key={social.label}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={social.label}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "32px",
+                      height: "32px",
+                      color: T.muted,
+                      textDecoration: "none",
+                      border: `1px solid ${T.border}`,
+                      borderRadius: "4px",
+                      transition: "all 0.15s",
+                      padding: "4px",
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.color = T.accent;
+                      e.currentTarget.style.borderColor = T.accent;
+                      e.currentTarget.style.background = "rgba(240,255,68,0.05)";
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.color = T.muted;
+                      e.currentTarget.style.borderColor = T.border;
+                      e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    {social.type === "image" ? (
+                      <img 
+                        src={social.src} 
+                        alt={social.label}
+                        style={{ width: "16px", height: "16px", objectFit: "contain" }}
+                      />
+                    ) : (
+                      <social.Icon size={16} strokeWidth={1.5} />
+                    )}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
