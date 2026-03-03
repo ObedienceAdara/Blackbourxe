@@ -21,8 +21,8 @@ const HomePage = ({ setPage, setCurrentPost }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   
-  const featuredPosts = POSTS.filter(p => p.featured);
-  const recentPosts = POSTS.filter(p => !p.featured).slice(0, 6);
+  const featuredPosts = POSTS.filter(p => p.featured && p.published);
+  const recentPosts = POSTS.filter(p => !p.featured && p.published).slice(0, 6);
 
   return (
     <div>
@@ -207,7 +207,7 @@ const HomePage = ({ setPage, setCurrentPost }) => {
                 <div style={{
                   fontSize: "10px", color: T.muted, letterSpacing: "0.08em",
                 }}>
-                  {POSTS.filter(p => p.category === cat).length} briefs
+                  {POSTS.filter(p => p.category === cat && p.published).length} briefs
                 </div>
               </div>
             ))}

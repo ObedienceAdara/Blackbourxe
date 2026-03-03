@@ -9,6 +9,16 @@ import PostCard from '../components/shared/PostCard';
 import NewsletterInline from '../components/shared/NewsletterInline';
 import { trackBlogPostView } from '../utils/analytics';
 
+// Eager imports for metadata
+import * as aiPoweredBusiness from './blog-posts/ai-powered-business-2026';
+import * as techJob200k from './blog-posts/200k-tech-job-2026';
+
+// Metadata mapping
+const metadataMap = {
+  'ai-powered-business-2026': aiPoweredBusiness.metadata,
+  '200k-tech-job-2026': techJob200k.metadata,
+};
+
 // Dynamically import blog post components
 const blogPostComponents = {
   '200k-tech-job-2026': lazy(() => import('./blog-posts/200k-tech-job-2026')),
@@ -36,6 +46,7 @@ const blogPostComponents = {
 const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
   const { slug } = useParams();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [postMetadata, setPostMetadata] = useState(null);
   
   // Use post from props if available, otherwise find by slug from URL
   const post = propPost || POSTS.find(p => p.slug === slug);
@@ -45,6 +56,11 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
     if (post) {
       document.title = `${post.title} — Blackbourxe`;
       trackBlogPostView(post.title);
+      
+      // Load metadata if available
+      if (metadataMap[post.slug]) {
+        setPostMetadata(metadataMap[post.slug]);
+      }
     }
     
     const handleResize = () => {
@@ -101,7 +117,7 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
       </div>
     );
   }
-  const related = POSTS.filter(p => p.category === post.category && p.id !== post.id).slice(0, 3);
+  const related = POSTS.filter(p => p.category === post.category && p.id !== post.id && p.published).slice(0, 3);
 
   // Simulated content sections
   const sections = [
@@ -170,7 +186,7 @@ const PostDetailPage = ({ post: propPost, setPage, setCurrentPost }) => {
           }}>
             <div style={{ display: "flex", gap: "24px" }}>
               <span style={{ fontSize: "11px", color: T.muted, letterSpacing: "0.08em" }}>⏱ {post.readTime} read</span>
-              <span style={{ fontSize: "11px", color: T.muted, letterSpacing: "0.08em" }}>📅 {post.date}</span>
+              <span style={{ fontSize: "11px", color: T.muted, letterSpacing: "0.08em" }}>📅 {postMetadata?.updatedAt || post.date}</span>
             </div>
             <DemandBar score={post.demand} />
           </div>

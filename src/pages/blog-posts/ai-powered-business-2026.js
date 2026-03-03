@@ -1,5 +1,15 @@
 import { useState } from "react";
 
+/* ── METADATA ── */
+export const metadata = {
+  title: "How to Build an AI-Powered Business in 2026 — The No-Fluff Playbook",
+  publishedAt: "Feb 20, 2026",
+  updatedAt: "Mar 2, 2026",
+  status: "published",
+  wordCount: 8500,
+  readTime: "18 min"
+};
+
 /* ── FONTS ── */
 const Fonts = () => (
   <style>{`

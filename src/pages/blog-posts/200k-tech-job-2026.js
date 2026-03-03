@@ -1,5 +1,15 @@
 import { useState } from "react";
 
+/* ── METADATA ── */
+export const metadata = {
+  title: "How to Land a $200K+ Tech Job in 2026 — The Exact Playbook",
+  publishedAt: "Feb 15, 2026",
+  updatedAt: "Mar 3, 2026",
+  status: "published",
+  wordCount: 7200,
+  readTime: "16 min"
+};
+
 /* ── FONTS ── */
 const Fonts = () => (
   <style>{`

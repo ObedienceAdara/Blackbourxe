@@ -23,6 +23,7 @@ const ResearchPage = ({ setPage, setCurrentPost }) => {
   const [sort, setSort] = useState("demand");
 
   const filtered = POSTS
+    .filter(p => p.published)
     .filter(p => activeCategory === "All" || p.category === activeCategory)
     .filter(p => search === "" ||
       p.title.toLowerCase().includes(search.toLowerCase()) ||
