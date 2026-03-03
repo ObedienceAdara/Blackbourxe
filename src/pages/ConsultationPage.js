@@ -64,11 +64,25 @@ const ConsultationPage = () => {
   };
 
   const handleSubmit = () => {
+    // Check rate limit
+    const lastSubmissionTime = localStorage.getItem(RATE_LIMIT_KEY);
+    if (lastSubmissionTime) {
+      const timeSinceLastSubmission = Date.now() - parseInt(lastSubmissionTime);
+      if (timeSinceLastSubmission < COOLDOWN_PERIOD) {
+        const remainingSeconds = Math.ceil((COOLDOWN_PERIOD - timeSinceLastSubmission) / 1000);
+        setErrors({ general: `Please wait ${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''} before submitting again` });
+        return;
+      }
+    }
+    
     if (validateForm()) {
+      setIsSubmitting(true);
+      
       // Send data to Make.com webhook
       const webhookUrl = process.env.REACT_APP_WEBHOOK_CONSULTATION;
       if (!webhookUrl) {
         setErrors({ general: "Configuration error. Please try again later." });
+        setIsSubmitting(false);
         return;
       }
 
@@ -87,16 +101,35 @@ const ConsultationPage = () => {
       })
       .then(response => {
         if (response.ok) {
+          // Store submission time
+          localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString());
           setSubmitted(true);
           trackConsultationSubmit(form.topic);
+          
+          // Start 5-second button cooldown
+          setCooldownSeconds(5);
+          const cooldownInterval = setInterval(() => {
+            setCooldownSeconds(prev => {
+              if (prev <= 1) {
+                clearInterval(cooldownInterval);
+                setIsSubmitting(false);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
         } else {
           setErrors({ ...errors, submit: "Something went wrong. Please try again." });
+          setIsSubmitting(false);
         }
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error('[Consultation Submission Error]');
         setErrors({ ...errors, submit: "Network error. Please check your connection and try again." });
+        setIsSubmitting(false);
       });
+    } else {
+      setIsSubmitting(false);
     }
   };
 

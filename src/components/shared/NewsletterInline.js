@@ -25,11 +25,19 @@ const NewsletterInline = () => {
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleSubmit = () => {
     setError("");
+    
+    // Check rate limit
+    const lastSubmissionTime = localStorage.getItem(RATE_LIMIT_KEY);
+    if (lastSubmissionTime) {
+      const timeSinceLastSubmission = Date.now() - parseInt(lastSubmissionTime);
+      if (timeSinceLastSubmission < COOLDOWN_PERIOD) {
+        const remainingSeconds = Math.ceil((COOLDOWN_PERIOD - timeSinceLastSubmission) / 1000);
+        setError(`Please wait ${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''} before submitting again`);
+        return;
+      }
+    }
     
     if (!email.trim()) {
       setError("Email is required");
@@ -41,10 +49,13 @@ const NewsletterInline = () => {
       return;
     }
     
+    setIsSubmitting(true);
+    
     // Send data to Make.com webhook
     const webhookUrl = process.env.REACT_APP_WEBHOOK_NEWSLETTER;
     if (!webhookUrl) {
       setError("Configuration error. Please try again later.");
+      setIsSubmitting(false);
       return;
     }
 
@@ -61,19 +72,34 @@ const NewsletterInline = () => {
     })
     .then(response => {
       if (response.ok) {
+        // Store submission time
+        localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString());
         setSubmitted(true);
         trackNewsletterSignup('inline_newsletter');
+        
+        // Start 5-second button cooldown
+        setCooldownSeconds(5);
+        const cooldownInterval = setInterval(() => {
+          setCooldownSeconds(prev => {
+            if (prev <= 1) {
+              clearInterval(cooldownInterval);
+              setIsSubmitting(false);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       } else {
         setError("Something went wrong. Please try again.");
+        setIsSubmitting(false);
       }
     })
     .catch(error => {
-      console.error('Error:', error);
+      console.error('[Newsletter Inline Submission Error]');
       setError("Network error. Please check your connection.");
+      setIsSubmitting(false);
     });
   };
-
-  const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSubmit();
     }
