@@ -20,6 +20,9 @@
 .env.production.local
 .env.example
 
+# Security audit reports (contains sensitive vulnerability information)
+SECURITY_AUDIT_REPORT.md
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
