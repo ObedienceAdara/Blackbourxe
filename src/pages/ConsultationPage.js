@@ -60,7 +60,13 @@ const ConsultationPage = () => {
   const handleSubmit = () => {
     if (validateForm()) {
       // Send data to Make.com webhook
-      fetch('https://hook.eu2.make.com/dhfcqp3i2138v8xjm35wuoy9yoly56uk', {
+      const webhookUrl = process.env.REACT_APP_WEBHOOK_CONSULTATION;
+      if (!webhookUrl) {
+        setError("Configuration error. Please try again later.");
+        return;
+      }
+
+      fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

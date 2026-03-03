@@ -41,7 +41,13 @@ const NewsletterPage = () => {
     }
     
     // Send data to Make.com webhook
-    fetch('https://hook.eu2.make.com/exwtidtmqhvpffne6izk9ivix5n9iayw', {
+    const webhookUrl = process.env.REACT_APP_WEBHOOK_NEWSLETTER;
+    if (!webhookUrl) {
+      setError("Configuration error. Please try again later.");
+      return;
+    }
+
+    fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
