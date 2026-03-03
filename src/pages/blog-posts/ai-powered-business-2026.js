@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 /* ── METADATA ── */
 export const metadata = {
   title: "How to Build an AI-Powered Business in 2026 — The No-Fluff Playbook",
@@ -35,15 +33,6 @@ const C = {
 };
 
 /* ── MICRO COMPONENTS ── */
-const Tag = ({ children, color }) => (
-  <span style={{
-    display:"inline-flex", alignItems:"center", padding:"3px 10px", fontSize:"9.5px",
-    letterSpacing:"0.13em", textTransform:"uppercase", fontWeight:600,
-    background:color?`${color}18`:`${C.dark}08`, color:color||C.muted,
-    border:`1px solid ${color?`${color}30`:C.bd}`,
-    fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap",
-  }}>{children}</span>
-);
 
 const Divider = ({ label, color }) => (
   <div style={{
