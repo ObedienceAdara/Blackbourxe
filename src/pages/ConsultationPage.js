@@ -62,7 +62,7 @@ const ConsultationPage = () => {
       // Send data to Make.com webhook
       const webhookUrl = process.env.REACT_APP_WEBHOOK_CONSULTATION;
       if (!webhookUrl) {
-        setError("Configuration error. Please try again later.");
+        setErrors({ general: "Configuration error. Please try again later." });
         return;
       }
 
