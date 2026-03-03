@@ -25,6 +25,9 @@ const NewsletterInline = () => {
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = () => {
     setError("");
     
@@ -100,6 +103,8 @@ const NewsletterInline = () => {
       setIsSubmitting(false);
     });
   };
+
+  const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSubmit();
     }
