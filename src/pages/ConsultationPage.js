@@ -22,6 +22,12 @@ const ConsultationPage = () => {
   const [form, setForm] = useState({ name: "", email: "", topic: "", detail: "" });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+
+  // Rate limiting key
+  const RATE_LIMIT_KEY = 'consultation_submission_time';
+  const COOLDOWN_PERIOD = 60000; // 60 seconds in milliseconds
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -299,14 +305,16 @@ const ConsultationPage = () => {
 
                 <button
                   onClick={handleSubmit}
+                  disabled={isSubmitting || cooldownSeconds > 0}
                   style={{
-                    width: "100%", background: T.accent, color: T.bg,
-                    border: "none", padding: "16px",
-                    cursor: "pointer", fontFamily: "'Syne', sans-serif",
-                    fontWeight: 700, fontSize: "12px",
-                    letterSpacing: "0.1em", textTransform: "uppercase",
+                    width: '100%', background: isSubmitting || cooldownSeconds > 0 ? T.muted : T.accent, color: isSubmitting || cooldownSeconds > 0 ? 'rgba(255,255,255,0.3)' : T.bg,
+                    border: 'none', padding: '16px',
+                    cursor: isSubmitting || cooldownSeconds > 0 ? 'not-allowed' : 'pointer', fontFamily: "'Syne', sans-serif",
+                    fontWeight: 700, fontSize: '12px',
+                    letterSpacing: '0.1em', textTransform: 'uppercase',
+                    opacity: isSubmitting || cooldownSeconds > 0 ? 0.6 : 1, transition: 'all 0.2s',
                   }}
-                >Submit Request →</button>
+                >{cooldownSeconds > 0 ? `Wait ${cooldownSeconds}s` : isSubmitting ? 'Submitting...' : 'Submit Request →'}</button>
               </div>
             </div>
           </div>

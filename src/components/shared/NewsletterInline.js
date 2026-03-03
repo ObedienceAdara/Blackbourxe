@@ -7,6 +7,12 @@ const NewsletterInline = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+
+  // Rate limiting key
+  const RATE_LIMIT_KEY = 'newsletter_inline_submission_time';
+  const COOLDOWN_PERIOD = 60000; // 60 seconds in milliseconds
 
   useEffect(() => {
     const handleResize = () => {
@@ -103,15 +109,21 @@ const NewsletterInline = () => {
         />
         <button
           onClick={handleSubmit}
+          disabled={isSubmitting || cooldownSeconds > 0}
           style={{
-            background: T.accent, color: T.bg, border: "none",
-            padding: "12px 20px", cursor: "pointer",
+            background: isSubmitting || cooldownSeconds > 0 ? T.muted : T.accent,
+            color: isSubmitting || cooldownSeconds > 0 ? 'rgba(255,255,255,0.3)' : T.bg,
+            border: 'none',
+            padding: '12px 20px',
+            cursor: isSubmitting || cooldownSeconds > 0 ? 'not-allowed' : 'pointer',
             fontFamily: "'Syne', sans-serif", fontWeight: 700,
-            fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase",
-            width: isMobile ? "100%" : "auto",
-            marginTop: isMobile ? "8px" : "0",
+            fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase',
+            width: isMobile ? '100%' : 'auto',
+            marginTop: isMobile ? '8px' : '0',
+            opacity: isSubmitting || cooldownSeconds > 0 ? 0.6 : 1,
+            transition: 'all 0.2s',
           }}
-        >Subscribe</button>
+        >{cooldownSeconds > 0 ? `${cooldownSeconds}s` : isSubmitting ? "..." : "Subscribe"}</button>
       </div>
       {error && (
         <div style={{ 

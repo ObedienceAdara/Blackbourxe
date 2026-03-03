@@ -21,6 +21,12 @@ const NewsletterPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [interests, setInterests] = useState([]);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+
+  // Rate limiting key
+  const RATE_LIMIT_KEY = 'newsletter_submission_time';
+  const COOLDOWN_PERIOD = 60000; // 60 seconds in milliseconds
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,6 +35,17 @@ const NewsletterPage = () => {
 
   const handleSubmit = () => {
     setError("");
+    
+    // Check rate limit
+    const lastSubmissionTime = localStorage.getItem(RATE_LIMIT_KEY);
+    if (lastSubmissionTime) {
+      const timeSinceLastSubmission = Date.now() - parseInt(lastSubmissionTime);
+      if (timeSinceLastSubmission < COOLDOWN_PERIOD) {
+        const remainingSeconds = Math.ceil((COOLDOWN_PERIOD - timeSinceLastSubmission) / 1000);
+        setError(`Please wait ${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''} before submitting again`);
+        return;
+      }
+    }
     
     if (!email.trim()) {
       setError("Email is required");
@@ -40,10 +57,13 @@ const NewsletterPage = () => {
       return;
     }
     
+    setIsSubmitting(true);
+    
     // Send data to Make.com webhook
     const webhookUrl = process.env.REACT_APP_WEBHOOK_NEWSLETTER;
     if (!webhookUrl) {
       setError("Configuration error. Please try again later.");
+      setIsSubmitting(false);
       return;
     }
 
@@ -61,15 +81,32 @@ const NewsletterPage = () => {
     })
     .then(response => {
       if (response.ok) {
+        // Store submission time
+        localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString());
         setSubmitted(true);
         trackNewsletterSignup('newsletter_page');
+        
+        // Start 5-second button cooldown
+        setCooldownSeconds(5);
+        const cooldownInterval = setInterval(() => {
+          setCooldownSeconds(prev => {
+            if (prev <= 1) {
+              clearInterval(cooldownInterval);
+              setIsSubmitting(false);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       } else {
         setError("Something went wrong. Please try again.");
+        setIsSubmitting(false);
       }
     })
     .catch(error => {
-      console.error('Error:', error);
+      console.error('[Newsletter Submission Error]');
       setError("Network error. Please check your connection.");
+      setIsSubmitting(false);
     });
   };
 
@@ -166,17 +203,23 @@ const NewsletterPage = () => {
                 />
                 <button
                   onClick={handleSubmit}
+                  disabled={isSubmitting || cooldownSeconds > 0}
                   style={{
-                    background: T.accent, color: T.bg, border: "none",
-                    padding: "14px 24px", cursor: "pointer",
+                    background: isSubmitting || cooldownSeconds > 0 ? T.muted : T.accent,
+                    color: isSubmitting || cooldownSeconds > 0 ? 'rgba(255,255,255,0.3)' : T.bg,
+                    border: 'none',
+                    padding: '14px 24px',
+                    cursor: isSubmitting || cooldownSeconds > 0 ? 'not-allowed' : 'pointer',
                     fontFamily: "'Syne', sans-serif", fontWeight: 700,
-                    fontSize: isMobile ? "10px" : "11px", 
-                    letterSpacing: "0.1em", 
-                    textTransform: "uppercase",
-                    width: isMobile ? "100%" : "auto",
-                    marginTop: isMobile ? "8px" : "0",
+                    fontSize: isMobile ? '10px' : '11px', 
+                    letterSpacing: '0.1em', 
+                    textTransform: 'uppercase',
+                    width: isMobile ? '100%' : 'auto',
+                    marginTop: isMobile ? '8px' : '0',
+                    opacity: isSubmitting || cooldownSeconds > 0 ? 0.6 : 1,
+                    transition: 'all 0.2s',
                   }}
-                >Subscribe →</button>
+                >{cooldownSeconds > 0 ? `Wait ${cooldownSeconds}s` : isSubmitting ? 'Submitting...' : 'Subscribe →'}</button>
               </div>
               {error && (
                 <div style={{ 
